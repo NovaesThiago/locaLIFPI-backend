@@ -1,18 +1,11 @@
-require("dotenv").config();
-
-const db = require("./db")
-
-const port = process.env.PORT
-
-const express = require("express")
+import express from 'express'
+import funcionarioRoutes from './routes/funcionario.js'
 
 const app = express()
+app.use(express.json())
 
-app.get("/", (req, res) => {
-    res.json({
-        mensage: "Rodando..."
-    })
+app.use('/api/funcionario', funcionarioRoutes)
+
+app.listen(3000, () => {
+  console.log('Servidor rodando em http://localhost:3000')
 })
-
-app.listen(port);
-
