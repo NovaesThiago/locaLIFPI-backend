@@ -20,9 +20,11 @@
   },
   "homepage": "https://github.com/NovaesThiago/locaLIFPI-backend#readme",
   "dependencies": {
-    "@supabase/supabase-js": "^2.52.1",
+    "@prisma/client": "^6.13.0",
     "dotenv": "^17.0.1",
-    "express": "^5.1.0",
-    "pg": "^8.16.3"
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.13.0"
   }
 }

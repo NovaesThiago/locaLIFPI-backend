@@ -1,0 +1,171 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model auditorio {
+  auditorio_id             BigInt   @id @default(autoincrement())
+  capacidade               Int?
+  equipamentos_audio_video String?
+  created_at               DateTime @default(now()) @db.Timestamptz(6)
+  local                    local    @relation(fields: [auditorio_id], references: [local_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model banheiro {
+  banheiro_id BigInt   @id @default(autoincrement())
+  genero      String?  @db.VarChar
+  funcional   Boolean? @default(true)
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  local       local    @relation(fields: [banheiro_id], references: [local_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model biblioteca {
+  biblioteca_id BigInt   @id @default(autoincrement())
+  responsavel   String?  @db.VarChar
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  local         local    @relation(fields: [biblioteca_id], references: [local_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model bloco {
+  bloco_id   BigInt   @id @default(autoincrement())
+  nome       String   @db.VarChar
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  local      local[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model enfermaria {
+  enfermaria_id       BigInt   @id @default(autoincrement())
+  horario_atendimento String?  @db.VarChar
+  responsavel         String?  @db.VarChar
+  created_at          DateTime @default(now()) @db.Timestamptz(6)
+  local               local    @relation(fields: [enfermaria_id], references: [local_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model funcionario {
+  funcionario_id BigInt   @id @default(autoincrement())
+  nome           String   @db.VarChar
+  login          String   @db.VarChar
+  senha          String   @db.VarChar
+  administrador  Boolean? @default(false)
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model horario_aula {
+  horario_aula_id BigInt    @id @default(autoincrement())
+  sala_id         BigInt
+  turma_id        BigInt
+  turno_id        BigInt
+  created_at      DateTime  @default(now()) @db.Timestamptz(6)
+  sala_aula       sala_aula @relation(fields: [sala_id], references: [sala_aula_id], onDelete: NoAction, onUpdate: NoAction)
+  turma           turma     @relation(fields: [turma_id], references: [turma_id], onDelete: NoAction, onUpdate: NoAction)
+  turno           turno     @relation(fields: [turno_id], references: [turno_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model laboratorio {
+  laboratorio_id BigInt   @id @default(autoincrement())
+  tipo           String?  @db.VarChar
+  capacidade     Int?
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+  local          local    @relation(fields: [laboratorio_id], references: [local_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model lanchonete {
+  lanchonete_id      BigInt    @id @default(autoincrement())
+  tipo_comida        String?   @db.VarChar
+  horario_abertura   DateTime? @db.Time(6)
+  horario_fechamento DateTime? @db.Time(6)
+  contato            String?   @db.VarChar
+  created_at         DateTime  @default(now()) @db.Timestamptz(6)
+  local              local     @relation(fields: [lanchonete_id], references: [local_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model local {
+  local_id         BigInt            @id @default(autoincrement())
+  nome             String            @db.VarChar
+  bloco_id         BigInt
+  x                Int?
+  y                Int?
+  created_at       DateTime          @default(now()) @db.Timestamptz(6)
+  auditorio        auditorio?
+  banheiro         banheiro?
+  biblioteca       biblioteca?
+  enfermaria       enfermaria?
+  laboratorio      laboratorio?
+  lanchonete       lanchonete?
+  bloco            bloco             @relation(fields: [bloco_id], references: [bloco_id], onDelete: NoAction, onUpdate: NoAction)
+  quadra_esportes  quadra_esportes?
+  refeitorio       refeitorio?
+  sala_aula        sala_aula?
+  sala_professores sala_professores?
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model quadra_esportes {
+  quadra_esportes_id BigInt   @id @default(autoincrement())
+  tipo_esporte       String?  @db.VarChar
+  superficie         String?  @db.VarChar
+  iluminacao         Boolean? @default(true)
+  capacidade         Int?
+  created_at         DateTime @default(now()) @db.Timestamptz(6)
+  local              local    @relation(fields: [quadra_esportes_id], references: [local_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model refeitorio {
+  refeitorio_id       BigInt    @id @default(autoincrement())
+  capacidade_assentos Int?
+  horario_abertura    DateTime? @db.Time(6)
+  horario_fechamento  DateTime? @db.Time(6)
+  tipo_servico        String?   @db.VarChar
+  created_at          DateTime  @default(now()) @db.Timestamptz(6)
+  local               local     @relation(fields: [refeitorio_id], references: [local_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model sala_aula {
+  sala_aula_id BigInt         @id @default(autoincrement())
+  numero       String         @db.VarChar
+  created_at   DateTime       @default(now()) @db.Timestamptz(6)
+  horario_aula horario_aula[]
+  local        local          @relation(fields: [sala_aula_id], references: [local_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model sala_professores {
+  sala_professores_id BigInt   @id @default(autoincrement())
+  capacidade          Int?
+  acesso_restrito     Boolean? @default(true)
+  created_at          DateTime @default(now()) @db.Timestamptz(6)
+  local               local    @relation(fields: [sala_professores_id], references: [local_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model turma {
+  turma_id     BigInt         @id @default(autoincrement())
+  nome         String         @db.VarChar
+  created_at   DateTime       @default(now()) @db.Timestamptz(6)
+  horario_aula horario_aula[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model turno {
+  turno_id     BigInt         @id @default(autoincrement())
+  descricao    String         @db.VarChar
+  created_at   DateTime       @default(now()) @db.Timestamptz(6)
+  horario_aula horario_aula[]
+}
