@@ -1,6 +1,6 @@
-const express = require("express");
-const bcrypt = require("bcrypt");
-const prisma = require("../prisma/client"); // importa o Prisma já instanciado
+import express from "express";
+import bcrypt from "bcrypt";
+import prisma from "../prisma/client.js";
 
 const router = express.Router();
 
@@ -33,4 +33,4 @@ router.post("/registro", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
