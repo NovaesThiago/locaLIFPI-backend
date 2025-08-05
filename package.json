@@ -21,6 +21,7 @@
   "homepage": "https://github.com/NovaesThiago/locaLIFPI-backend#readme",
   "dependencies": {
     "@prisma/client": "^6.13.0",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^17.0.1",
     "express": "^5.1.0"
   },
